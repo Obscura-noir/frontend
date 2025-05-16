@@ -754,3 +754,87 @@ export async function generateProof(pxe, circuit, inputs) {
 - Оптимизация размера пакетов
 - Обработка высоких задержек
 - Восстановление после обрывов
+
+
+## 15. Интеграция кошельков через Rainbow SDK
+
+### 15.1 Обзор и требования
+
+#### 15.1.1 Назначение
+- Интеграция Rainbow SDK для обеспечения безопасных подключений кошельков через различные провайдеры, включая Metamask, TrustWallet, Ledger и Rabby
+- Поддержка взаимодействия EVM-совместимых кошельков со смарт-контрактами платформы
+- Сохранение приватности при подключении кошельков в соответствии с принципами анонимности SECTOR8
+- Бесшовная интеграция с существующей PXE (Private Execution Environment)
+
+#### 15.1.2 Поддерживаемые провайдеры кошельков
+- **Основные кошельки:**
+  - Metamask (расширение браузера и мобильное приложение)
+  - TrustWallet (мобильное приложение и браузер)
+  - Ledger (аппаратный кошелек)
+  - Rabby (расширение браузера)
+- **Дополнительные кошельки:**
+  - Rainbow Wallet
+  - Coinbase Wallet
+  - Кошельки, совместимые с WalletConnect v2
+  - Argent
+  - Стандартные инжектированные кошельки
+
+#### 15.1.3 Технические зависимости
+- RainbowKit (последняя версия)
+- wagmi (основная библиотека хуков для Ethereum)
+- ethers.js или viem (библиотека для взаимодействия с Ethereum)
+- Web3Modal (опциональное резервное решение)
+- WalletConnect v2 SDK
+
+### 15.2 Архитектура интеграции
+
+#### 15.2.1 Интеграция RainbowKit Provider
+- Реализация RainbowKit провайдера в корне приложения
+- Настройка поддерживаемых сетей (Ethereum, Optimism, Arbitrum и др.)
+- Конфигурация кастомной темы в соответствии с дизайн-системой SECTOR8
+- Настройка возможностей переключения сетей в интерфейсе
+- Пример реализации:
+
+```typescript
+import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import { mainnet, optimism, arbitrum } from 'wagmi/chains';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { publicProvider } from 'wagmi/providers/public';
+
+// Настройка поддерживаемых сетей и провайдеров
+const { chains, publicClient } = configureChains(
+  [mainnet, optimism, arbitrum],
+  [
+    alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }),
+    publicProvider()
+  ]
+);
+
+// Создание конфигурации wagmi
+const wagmiConfig = createConfig({
+  autoConnect: false, // Отключено по причинам приватности
+  publicClient,
+});
+
+// Корень приложения с провайдерами
+const App = () => {
+  return (
+    <WagmiConfig config={wagmiConfig}>
+      <RainbowKitProvider 
+        chains={chains} 
+        theme={darkTheme({
+          accentColor: '#0F172A', // SECTOR8 синий
+          accentColorForeground: 'white',
+          borderRadius: 'medium',
+        })}
+        appInfo={{
+          appName: 'SECTOR8',
+          learnMoreUrl: '#',
+        }}
+      >
+        <YourApp />
+      </RainbowKitProvider>
+    </WagmiConfig>
+  );
+};
