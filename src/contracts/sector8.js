@@ -1,41 +1,49 @@
-// Универсальный конфиг для адресов и ABI смарт-контрактов платформы SECTOR8
+// Universal config for addresses and ABI of smart contracts of the SECTOR8 platform
 
 import ObscuraPrivacyEngine from "../abi/ObscuraPrivacyEngine.json";
 import ObscuraP2PMatchContract from "../abi/ObscuraP2PMatchContract.json";
 import ObscuraEscrowContract from "../abi/ObscuraEscrowContract.json";
 import ObscuraAgentRegistry from "../abi/ObscuraAgentRegistry.json";
 
+// Example of address structure: chainId => address
+// Fill in the actual addresses for each network
+export const CONTRACT_ADDRESSES = {
+  1: { // Ethereum Mainnet
+    ObscuraPrivacyEngine: "0x...",
+    ObscuraP2PMatchContract: "0x...",
+    ObscuraEscrowContract: "0x...",
+    ObscuraAgentRegistry: "0x...",
+  },
+  5: { // Goerli
+    ObscuraPrivacyEngine: "0x...",
+    ObscuraP2PMatchContract: "0x...",
+    ObscuraEscrowContract: "0x...",
+    ObscuraAgentRegistry: "0x...",
+  },
+  31337: { // Hardhat/localhost
+    ObscuraPrivacyEngine: "0x...",
+    ObscuraP2PMatchContract: "0x...",
+    ObscuraEscrowContract: "0x...",
+    ObscuraAgentRegistry: "0x...",
+  },
+  // Add other chainId as needed
+};
+
 export const CONTRACTS = {
-  USDT_BRIDGE: {
-    address: "0xYourUSDTBridgeAddress", // замените на реальный адрес
-    abi: [
-      // Пример ABI для функции shield
-      {
-        "inputs": [
-          { "internalType": "uint256", "name": "amount", "type": "uint256" }
-        ],
-        "name": "shield",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      }
-    ]
+  ObscuraPrivacyEngine: {
+    abi: ObscuraPrivacyEngine.abi,
+    getAddress: (chainId) => CONTRACT_ADDRESSES[chainId]?.ObscuraPrivacyEngine || null,
   },
-  OBSCURA_PRIVACY_ENGINE: {
-    address: "0xYourPrivacyEngineAddress", // замените на реальный адрес
-    abi: ObscuraPrivacyEngine.abi
+  ObscuraP2PMatchContract: {
+    abi: ObscuraP2PMatchContract.abi,
+    getAddress: (chainId) => CONTRACT_ADDRESSES[chainId]?.ObscuraP2PMatchContract || null,
   },
-  OBSCURA_P2P_MATCH: {
-    address: "0xYourP2PMatchAddress", // замените на реальный адрес
-    abi: ObscuraP2PMatchContract.abi
+  ObscuraEscrowContract: {
+    abi: ObscuraEscrowContract.abi,
+    getAddress: (chainId) => CONTRACT_ADDRESSES[chainId]?.ObscuraEscrowContract || null,
   },
-  OBSCURA_ESCROW: {
-    address: "0xYourEscrowAddress", // замените на реальный адрес
-    abi: ObscuraEscrowContract.abi
+  ObscuraAgentRegistry: {
+    abi: ObscuraAgentRegistry.abi,
+    getAddress: (chainId) => CONTRACT_ADDRESSES[chainId]?.ObscuraAgentRegistry || null,
   },
-  OBSCURA_AGENT_REGISTRY: {
-    address: "0xYourAgentRegistryAddress", // замените на реальный адрес
-    abi: ObscuraAgentRegistry.abi
-  },
-  // Добавляйте новые контракты по мере необходимости
 }; 
