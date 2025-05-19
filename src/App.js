@@ -7,29 +7,6 @@ import TransactionDetailsPage from './pages/TransactionDetailsPage';
 import ProfilePage from './pages/ProfilePage';
 import ExchangePage from './pages/ExchangePage';
 import './App.css';
-import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { WagmiProvider, createConfig } from "wagmi";
-import { goerli, sepolia } from "wagmi/chains";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import WalletConnect from "./components/WalletConnect";
-import ShieldButton from "./components/ShieldButton";
-import { WalletProvider } from "./components/WalletProvider";
-import WalletConnectButton from "./components/WalletConnect";
-import ContractInteraction from "./components/ContractInteraction";
-import PXEPrivateNote from "./components/PXEPrivateNote";
-import ContractFunctionCaller from "./components/ContractFunctionCaller";
-import BackendStatus from "./components/BackendStatus";
-
-const config = createConfig(
-  getDefaultConfig({
-    appName: "Sector 8",
-    chains: [goerli, sepolia],
-    projectId: "demo", // замените на свой WalletConnect Project ID для продакшена
-  })
-);
-
-const queryClient = new QueryClient();
 
 function getUser() {
   try {
@@ -110,35 +87,23 @@ function App() {
   };
 
   return (
-    <WalletProvider>
-      <WagmiProvider config={config}>
-        <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider>
-            <div className="App">
-              <header className="App-header">
-                <h1>SECTOR8: Приватные транзакции</h1>
-                <WalletConnectButton />
-                <BackendStatus />
-              </header>
-              <main>
-                <section>
-                  <h2>Приватная операция через PXE</h2>
-                  <PXEPrivateNote />
-                </section>
-                <section>
-                  <h2>Вызов любой функции контракта</h2>
-                  <ContractFunctionCaller />
-                </section>
-                <section>
-                  <h2>Демо: Shield USDT</h2>
-                  <ContractInteraction />
-                </section>
-              </main>
-            </div>
-          </RainbowKitProvider>
-        </QueryClientProvider>
-      </WagmiProvider>
-    </WalletProvider>
+    <>
+      <TopBar onMenuClick={() => setMobileMenuOpen(true)} onLogout={handleLogout} user={user} />
+      <MobileMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} onLogout={handleLogout} />
+      <div className="app-container">
+        <SideBar onLogout={handleLogout} />
+        <div className="main-content">
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+            <Route path="/exchange" element={<PrivateRoute><ExchangePage /></PrivateRoute>} />
+            <Route path="/create" element={<PrivateRoute><CreateTransactionPage /></PrivateRoute>} />
+            <Route path="/transaction/:id" element={<PrivateRoute><TransactionDetailsPage /></PrivateRoute>} />
+            <Route path="/profile" element={<PrivateRoute><ProfilePage user={user} /></PrivateRoute>} />
+          </Routes>
+        </div>
+      </div>
+    </>
   );
 }
 
