@@ -1,4 +1,5 @@
 import React from 'react';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const mockTransactions = [
   { id: 'TX-001', status: 'completed', amount: 1000, currency: 'USD', private: true },
@@ -16,6 +17,7 @@ const DashboardPage = () => {
   return (
     <div>
       <h2 style={{ marginBottom: 24 }}>Активные сделки</h2>
+      <ConnectButton />
       {mockTransactions.map(tx => (
         <div className="card" key={tx.id}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

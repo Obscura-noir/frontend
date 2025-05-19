@@ -7,6 +7,11 @@ import TransactionDetailsPage from './pages/TransactionDetailsPage';
 import ProfilePage from './pages/ProfilePage';
 import ExchangePage from './pages/ExchangePage';
 import './App.css';
+import { WagmiConfig, createConfig, configureChains } from 'wagmi';
+import { mainnet, goerli } from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
 
 function getUser() {
   try {
@@ -71,6 +76,22 @@ function PrivateRoute({ children }) {
   return user ? children : <Navigate to="/" replace />;
 }
 
+// RainbowKit/Wagmi config
+const { chains, publicClient } = configureChains(
+  [mainnet, goerli],
+  [publicProvider()]
+);
+const { connectors } = getDefaultWallets({
+  appName: 'SECTOR8',
+  projectId: 'sector8-app',
+  chains,
+});
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient,
+});
+
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(getUser());
@@ -95,7 +116,7 @@ function App() {
         <div className="main-content">
           <Routes>
             <Route path="/" element={<LoginPage />} />
-            <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+            <Route path="/dashboard" element={<PrivateRoute><DashboardPage />{/* WalletConnectButton для теста */}</PrivateRoute>} />
             <Route path="/exchange" element={<PrivateRoute><ExchangePage /></PrivateRoute>} />
             <Route path="/create" element={<PrivateRoute><CreateTransactionPage /></PrivateRoute>} />
             <Route path="/transaction/:id" element={<PrivateRoute><TransactionDetailsPage /></PrivateRoute>} />
@@ -109,8 +130,12 @@ function App() {
 
 export default function AppWithRouter() {
   return (
-    <Router>
-      <App />
-    </Router>
+    <WagmiConfig config={wagmiConfig}>
+      <RainbowKitProvider chains={chains}>
+        <Router>
+          <App />
+        </Router>
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }
