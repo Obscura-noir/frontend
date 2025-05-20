@@ -3,6 +3,7 @@ import "./globals.css";
 import { WalletProvider } from "../components/WalletProvider";
 import Link from "next/link";
 import WalletConnectButton from "../components/WalletConnectButton";
+import '@rainbow-me/rainbowkit/styles.css';
 
 export const metadata = {
   title: "SECTOR 8",
@@ -14,7 +15,7 @@ const navStyle = {
   fontWeight: 500,
   fontSize: 17,
   textDecoration: "none",
-  padding: "8px 0",
+  padding: "10px 0",
   width: "100%",
   textAlign: "center" as const,
   borderRadius: 6,
@@ -26,9 +27,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ru">
       <body>
         <WalletProvider>
-          <div style={{ display: "flex", minHeight: "100vh" }}>
+          <div style={{ display: "flex", minHeight: "100vh", background: "#101624" }}>
             {/* Sidebar */}
-            <aside style={{ width: 220, background: "#181f36", padding: "32px 0 0 0", boxShadow: "2px 0 16px #0002", display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <aside style={{ width: 220, background: "#181f36", boxShadow: "2px 0 16px #0002", display: "flex", flexDirection: "column", alignItems: "center", padding: "32px 0 0 0", position: "sticky", left: 0, top: 0, height: "100vh" }}>
               <div style={{ fontWeight: 800, fontSize: 26, color: "#2ecc71", marginBottom: 32, letterSpacing: 2 }}>
                 SECTOR 8
               </div>
@@ -43,8 +44,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </div>
             </aside>
             {/* Main content */}
-            <main style={{ flex: 1, minHeight: 0, display: "flex", justifyContent: "center", alignItems: "flex-start", background: "#101624" }}>
-              <div style={{ width: "100%", maxWidth: 600, padding: "48px 24px" }}>
+            <main style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "flex-start" }}>
+              <div style={{ width: "100%", maxWidth: 520, minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 {children}
               </div>
             </main>
