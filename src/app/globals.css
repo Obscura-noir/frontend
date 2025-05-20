@@ -1,26 +1,57 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #101624;
+  color: #fff;
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
 }
+
+.card {
+  background: #181f36;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px #0002;
+  padding: 32px 24px;
+  margin-bottom: 24px;
+}
+
+.button {
+  background: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.button:hover {
+  background: #27ae60;
+}
+.input {
+  background: #232b47;
+  color: #fff;
+  border: 1px solid #2ecc71;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 15px;
+  margin-bottom: 12px;
+  width: 100%;
+}
+.label {
+  color: #b0b8c9;
+  font-size: 15px;
+  margin-bottom: 4px;
+  display: block;
+}
+.status-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.status-completed { background: #2ecc71; }
+.status-inprogress { background: #ffd600; }
+.status-rejected { background: #e74c3c; }
+.status-private { background: #00bcd4; } 
