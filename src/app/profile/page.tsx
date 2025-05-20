@@ -1,6 +1,18 @@
-import React from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
 
-const ProfilePage = ({ user }) => {
+const ProfilePage = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Попытка получить user из localStorage (или заглушка)
+    try {
+      const token = localStorage.getItem('token');
+      // Можно добавить fetch профиля по токену, если API готов
+      setUser({ email: 'user@example.com', id: '12345' }); // временная заглушка
+    } catch {}
+  }, []);
+
   return (
     <div className="card" style={{ maxWidth: 400, margin: '40px auto' }}>
       <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Профиль</h2>
